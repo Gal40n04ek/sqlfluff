@@ -3122,6 +3122,16 @@ class CsvFileFormatTypeParameters(BaseSegment):
             OneOf("AUTO", Ref("QuotedLiteralSegment")),
         ),
         Sequence("BINARY_FORMAT", Ref("EqualsSegment"), OneOf("HEX", "BASE64", "UTF8")),
+        Sequence(
+            "ESCAPE",
+            Ref("EqualsSegment"),
+            OneOf("NONE", Ref("QuotedLiteralSegment")),
+        ),
+        Sequence(
+            "ESCAPE_UNENCLOSED_FIELD",
+            Ref("EqualsSegment"),
+            OneOf("NONE", Ref("QuotedLiteralSegment")),
+        ),
         Sequence("TRIM_SPACE", Ref("EqualsSegment"), Ref("BooleanLiteralGrammar")),
         Sequence(
             "FIELD_OPTIONALLY_ENCLOSED_BY",
@@ -3134,7 +3144,10 @@ class CsvFileFormatTypeParameters(BaseSegment):
         Sequence(
             "NULL_IF",
             Ref("EqualsSegment"),
-            Bracketed(Delimited(Ref("QuotedLiteralSegment"))),
+            OneOf(
+                Bracketed(),
+                Bracketed(Delimited(Ref("QuotedLiteralSegment")))
+            ),
         ),
         Sequence(
             "ERROR_ON_COLUMN_COUNT_MISMATCH",
@@ -3357,6 +3370,7 @@ class ParquetFileFormatTypeParameters(BaseSegment):
         Sequence(
             "SNAPPY_COMPRESSION", Ref("EqualsSegment"), Ref("BooleanLiteralGrammar")
         ),
+        Sequence("BINARY_AS_TEXT", Ref("EqualsSegment"), Ref("BooleanLiteralGrammar")),
         Sequence("TRIM_SPACE", Ref("EqualsSegment"), Ref("BooleanLiteralGrammar")),
         Sequence(
             "NULL_IF",
